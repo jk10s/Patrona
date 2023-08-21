@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Encabezado y metadatos aquí -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Agrega un borde rojo a las ventas pendientes */
+        tr.pendiente {
+            border: 2px solid #ff5f5f; /* Color rojo */
+        }
+
+        /* Agrega un borde verde a las ventas finalizadas */
+        tr.finalizada {
+            border: 2px solid #6ee76e; /* Color verde */
+        }
+
+        /* Estilo de sombreado al pasar el cursor sobre la fila */
+        tr:hover {
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        /* Cambia el color de texto a rojo para ventas pendientes */
+        tr.pendiente td {
+            color: #ff5f5f; /* Color rojo */
+        }
+
+        /* Cambia el color de texto a verde para ventas finalizadas */
+        tr.finalizada td {
+            color: #6ee76e; /* Color verde */
+        }
+
+        /* Iconos para ventas pendientes y finalizadas */
+        .icon-pendiente::before {
+            content: "\2716"; /* Icono de "X" */
+            color: #ff5f5f; /* Color rojo */
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .icon-finalizada::before {
+            content: "\2714"; /* Icono de check */
+            color: #6ee76e; /* Color verde */
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header>
+        <!-- Encabezado de la página -->
+    </header>
+    
+    <!-- Contenido de la página -->
+    <div class="max-w-6xl mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-4">Ventas Registradas</h1>
+        <a href="/realizar-venta" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 ease-in-out">Agregar Nuevo Venta</a>
+        <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                    <th class="py-2 px-4">ID Venta</th>
+                    <th class="py-2 px-4">Cliente</th>
+                    <th class="py-2 px-4">Subtotal</th>
+                    <th class="py-2 px-4">Extra</th>
+                    <th class="py-2 px-4">Total Final</th>
+                    <th class="py-2 px-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% ventas.forEach(venta => { %>
+                    <tr class="<%= venta.Estado === 'pendiente' ? 'pendiente' : 'finalizada' %> hover:bg-gray-100">
+                        <td class="py-2 px-4"><%= venta.IDVenta %></td>
+                        <td class="py-2 px-4"><%= venta.NombreCliente %></td>
+                        <td class="py-2 px-4">$<%= parseFloat(venta.TotalVenta).toFixed(2) %></td>
+                        <td class="py-2 px-4">$<%= parseFloat(venta.TotalExtra).toFixed(2) %></td>
+                        <td class="py-2 px-4">$<%= (parseFloat(venta.TotalVenta) + parseFloat(venta.TotalExtra)).toFixed(2) %></td>
+                        <td class="py-2 px-4">
+                            <form action="/marcar-venta-finalizada" method="POST">
+                                <input type="hidden" name="ventaId" value="<%= venta.IDVenta %>">
+                                <button type="submit" class="<%= venta.Estado === 'pendiente' ? 'icon-pendiente' : 'icon-finalizada' %> hover:underline focus:outline-none">Marcar como Finalizada</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

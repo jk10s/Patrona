@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Encabezado y metadatos aquí -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Contenido de la página -->
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-4">Agregar Nuevo Cliente</h1>
+
+        <form class="bg-white p-4 rounded shadow-md" method="POST" action="/agregar-cliente">
+            <div class="mb-4">
+                <label class="block text-sm font-semibold" for="nombre">Nombre:</label>
+                <input class="w-full px-3 py-2 border rounded" type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold" for="telefono">Teléfono:</label>
+                <input class="w-full px-3 py-2 border rounded" type="text" id="telefono" name="telefono">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold" for="correo">Correo Electrónico:</label>
+                <input class="w-full px-3 py-2 border rounded" type="email" id="correo" name="correo" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold" for="otrosDetalles">Otros Detalles:</label>
+                <textarea class="w-full px-3 py-2 border rounded" id="otrosDetalles" name="otrosDetalles"></textarea>
+            </div>
+
+            <button class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded" type="submit">Agregar Cliente</button>
+        </form>
+
+        <a class="mt-4 inline-block px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" href="/clientes">
+            Volver a la lista de clientes
+        </a>
+    </div>
+</body>
+</html>

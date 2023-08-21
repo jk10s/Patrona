@@ -1,0 +1,67 @@
+function obtenerDatosDelReporte(tipoReporte, fechaReporte, callback) {
+    let query;
+    const startDate = new Date(fechaReporte);
+    startDate.setDate(1); // Establece el día al primero del mes seleccionado
+    startDate.setHours(0, 0, 0, 0); // Establece la hora en 00:00:00
+
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1); // Agrega un mes al mes seleccionado
+    endDate.setHours(0, 0, 0, 0); // Establece la hora en 00:00:00 del primer día del siguiente mes
+
+    query = 'SELECT FechaVenta, IDEmpleado, IDCliente, TotalFinal FROM Ventas WHERE FechaVenta >= ? AND FechaVenta < ?';
+
+    connection.query(query, [startDate, endDate], (error, results) => {
+        if (error) {
+            console.error('Error al obtener los datos del reporte:', error);
+            callback(error, null);
+        } else {
+            // Convertir los valores de TotalFinal a números decimales
+            for (const venta of results) {
+                venta.TotalFinal = parseFloat(venta.TotalFinal);
+            }
+            
+            // Realizar los cálculos necesarios para obtener el total de ventas
+            const totalVentas = calcularTotalVentas(results);
+            const reporte = {
+                tipoReporte: tipoReporte,
+                ventas: results,
+                totalVentas: totalVentas
+            };
+            callback(null, reporte);
+        }
+    });
+}
+
+// ...
+
+app.post('/generar-reporte', (req, res) => {
+    const tipoReporte = req.body.tipoReporte;
+    const fechaReporte = req.body.fechaReporte; // Nuevo campo de entrada para el reporte mensual
+    obtenerDatosDelReporte(tipoReporte, fechaReporte, (error, reporte) => {
+        if (error) {
+            res.status(500).send('Error al obtener los datos del reporte.');
+        } else {
+            console.log(reporte);
+            res.render('reporte', { reporte });
+        }
+    });
+});
+
+
+
+<form action="/generar-reporte" method="post" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <!-- ... -->
+    <div class="mb-4">
+        <label for="tipoReporte" class="block text-sm font-medium text-gray-700">Tipo de Reporte:</label>
+        <select name="tipoReporte" id="tipoReporte" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 focus:border-blue-300 transition">
+            <option value="diario">Diario</option>
+            <option value="semanal">Semanal</option>
+            <option value="mensual">Mensual</option>
+        </select>
+    </div>
+    <div class="mb-4">
+        <label for="fechaReporte" class="block text-sm font-medium text-gray-700">Fecha:</label>
+        <input type="month" name="fechaReporte" id="fechaReporte" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 focus:border-blue-300 transition">
+    </div>
+    <!-- ... -->
+</form>

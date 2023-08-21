@@ -1,0 +1,38 @@
+<!-- realizar_venta.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Encabezado y metadatos aquí -->
+</head>
+<body>
+    <!-- Contenido de la página -->
+    <h1>Realizar Venta</h1>
+
+    <form method="POST" action="/realizar-venta">
+        <!-- Campo para seleccionar el cliente -->
+        <label for="cliente">Cliente:</label>
+        <select id="cliente" name="cliente">
+            <% clientes.forEach(cliente => { %>
+                <option value="<%= cliente.IDCliente %>"><%= cliente.Nombre %></option>
+            <% }); %>
+        </select><br>
+    
+        <!-- Agrega esto en el formulario de venta -->
+        <label for="producto">Seleccionar Producto:</label>
+        <select id="producto" name="producto" required>
+            <% productos.forEach(producto => { %>
+                <option value="<%= producto.IDProducto %>">
+                    <%= producto.NombreProducto %> - <%= producto.PrecioProducto %>
+                </option>
+            <% }); %>
+        </select><br>
+    
+        <!-- Campo para ingresar costos adicionales -->
+        <label for="costosExtra">Costos Adicionales:</label>
+        <input type="number" id="costosExtra" name="costosExtra" step="0.01"><br>
+    
+        <button type="submit">Realizar Venta</button>
+    </form>
+    
+</body>
+</html>
