@@ -1,1 +1,1 @@
-# Discoteca_la_patrona.
+# Discoteca_la_patrona
